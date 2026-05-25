@@ -1,0 +1,19 @@
+version: 0.2
+env:
+  variables:
+    TF_IN_AUTOMATION: "true"
+phases:
+  install:
+    commands:
+      - yum install -y unzip
+      - |
+        TF_URL="https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip"
+        curl -sL "$TF_URL" -o tf.zip
+      - unzip tf.zip -d /usr/local/bin/
+      - terraform --version
+  pre_build:
+    commands:
+      - terraform init -input=false
+  build:
+    commands:
+      - terraform apply -var "vpc_id=${VPC_ID}" -auto-approve -input=false

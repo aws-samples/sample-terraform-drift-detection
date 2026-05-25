@@ -1,0 +1,183 @@
+<mxfile host="app.diagrams.net" modified="2025-05-16T00:00:00.000Z" agent="Kiro" version="24.0.0" type="device">
+  <diagram id="terraform-drift-detection" name="Terraform Drift Detection &amp; Remediation">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title" value="Terraform Drift Detection &amp; Auto-Remediation Pipeline" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;fontColor=#232F3E;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="520" height="40" as="geometry" />
+        </mxCell>
+        <!-- AWS Cloud boundary -->
+        <mxCell id="aws-cloud" value="AWS Cloud" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;stroke=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="1520" height="800" as="geometry" />
+        </mxCell>
+        <!-- EventBridge Scheduler -->
+        <mxCell id="eventbridge" value="Amazon EventBridge&lt;br&gt;Scheduler&lt;br&gt;(every 6 hours)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;" vertex="1" parent="1">
+          <mxGeometry x="100" y="340" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- Step Functions -->
+        <mxCell id="stepfunctions" value="AWS Step Functions&lt;br&gt;Orchestrator" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.step_functions;" vertex="1" parent="1">
+          <mxGeometry x="280" y="340" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- CodeBuild Plan -->
+        <mxCell id="codebuild-plan" value="AWS CodeBuild&lt;br&gt;terraform plan" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C7131F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.codebuild;" vertex="1" parent="1">
+          <mxGeometry x="470" y="340" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- Lambda Classifier -->
+        <mxCell id="lambda-classifier" value="AWS Lambda&lt;br&gt;Drift Classifier" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#ED7100;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" vertex="1" parent="1">
+          <mxGeometry x="680" y="340" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- CloudWatch - No Drift -->
+        <mxCell id="cloudwatch-log" value="Amazon CloudWatch&lt;br&gt;Log (No Drift)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;" vertex="1" parent="1">
+          <mxGeometry x="900" y="140" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- CodeBuild Apply (Low-Risk) -->
+        <mxCell id="codebuild-apply-low" value="AWS CodeBuild&lt;br&gt;terraform apply&lt;br&gt;(Auto)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C7131F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.codebuild;" vertex="1" parent="1">
+          <mxGeometry x="900" y="340" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- S3 Audit Low -->
+        <mxCell id="s3-audit-low" value="Amazon S3&lt;br&gt;Audit Log" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#3F8624;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="340" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- SNS Notification -->
+        <mxCell id="sns" value="Amazon SNS&lt;br&gt;Notification" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sns;" vertex="1" parent="1">
+          <mxGeometry x="900" y="560" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- Human Approval -->
+        <mxCell id="human-approval" value="Human Approval&lt;br&gt;(Task Token Callback)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;fillColor=#BF0816;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.general_users;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="560" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- CodeBuild Apply (High-Risk) -->
+        <mxCell id="codebuild-apply-high" value="AWS CodeBuild&lt;br&gt;terraform apply&lt;br&gt;(Approved)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C7131F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.codebuild;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="560" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- S3 Audit High -->
+        <mxCell id="s3-audit-high" value="Amazon S3&lt;br&gt;Audit Log" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#3F8624;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="560" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- S3 Plan Outputs -->
+        <mxCell id="s3-plans" value="Amazon S3&lt;br&gt;Plan Outputs" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#3F8624;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" vertex="1" parent="1">
+          <mxGeometry x="470" y="560" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- CloudWatch Dashboard -->
+        <mxCell id="cloudwatch-dashboard" value="Amazon CloudWatch&lt;br&gt;Drift Metrics Dashboard" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;" vertex="1" parent="1">
+          <mxGeometry x="280" y="750" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- Connections -->
+        <!-- EventBridge -> Step Functions -->
+        <mxCell id="edge-1" value="trigger" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#232F3E;strokeWidth=2;fontSize=10;" edge="1" source="eventbridge" target="stepfunctions" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Step Functions -> CodeBuild Plan -->
+        <mxCell id="edge-2" value="run plan" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#232F3E;strokeWidth=2;fontSize=10;" edge="1" source="stepfunctions" target="codebuild-plan" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- CodeBuild Plan -> Lambda Classifier -->
+        <mxCell id="edge-3" value="plan JSON" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#232F3E;strokeWidth=2;fontSize=10;" edge="1" source="codebuild-plan" target="lambda-classifier" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- CodeBuild Plan -> S3 Plan Outputs -->
+        <mxCell id="edge-4" value="store plan" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#3F8624;strokeWidth=1;dashed=1;fontSize=10;" edge="1" source="codebuild-plan" target="s3-plans" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Lambda -> CloudWatch (No Drift) -->
+        <mxCell id="edge-5" value="no drift" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#3CB371;strokeWidth=2;fontSize=10;fontColor=#3CB371;" edge="1" source="lambda-classifier" target="cloudwatch-log" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- Lambda -> CodeBuild Apply Low (Low-Risk) -->
+        <mxCell id="edge-6" value="low-risk&#xa;auto-remediate" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#FF8C00;strokeWidth=2;fontSize=10;fontColor=#FF8C00;" edge="1" source="lambda-classifier" target="codebuild-apply-low" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- CodeBuild Apply Low -> S3 Audit Low -->
+        <mxCell id="edge-7" value="audit log" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#232F3E;strokeWidth=2;fontSize=10;" edge="1" source="codebuild-apply-low" target="s3-audit-low" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Lambda -> SNS (High/Critical) -->
+        <mxCell id="edge-8" value="high/critical&#xa;notify" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#FF0000;strokeWidth=2;fontSize=10;fontColor=#FF0000;" edge="1" source="lambda-classifier" target="sns" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- SNS -> Human Approval -->
+        <mxCell id="edge-9" value="approval request" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#232F3E;strokeWidth=2;fontSize=10;" edge="1" source="sns" target="human-approval" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Human Approval -> CodeBuild Apply High -->
+        <mxCell id="edge-10" value="approved" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#232F3E;strokeWidth=2;fontSize=10;" edge="1" source="human-approval" target="codebuild-apply-high" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- CodeBuild Apply High -> S3 Audit High -->
+        <mxCell id="edge-11" value="audit log" style="edgeStyle=orthogonalEdgeStyle;html=1;align=center;verticalAlign=middle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#232F3E;strokeWidth=2;fontSize=10;" edge="1" source="codebuild-apply-high" target="s3-audit-high" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Dashed lines to CloudWatch Dashboard -->
+        <mxCell id="edge-12" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#808080;strokeWidth=1;dashed=1;fontSize=9;" edge="1" source="stepfunctions" target="cloudwatch-dashboard" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="720" />
+              <mxPoint x="310" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-13" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;strokeColor=#808080;strokeWidth=1;dashed=1;fontSize=9;" edge="1" source="lambda-classifier" target="cloudwatch-dashboard" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="720" />
+              <mxPoint x="325" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <!-- Legend -->
+        <mxCell id="legend-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="100" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" value="Legend" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=12;fontStyle=1;fontColor=#232F3E;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="110" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-green" value="" style="endArrow=block;html=1;strokeColor=#3CB371;strokeWidth=2;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1300" y="155" as="sourcePoint" />
+            <mxPoint x="1370" y="155" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-green-text" value="No drift (exit)" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#3CB371;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="145" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-orange" value="" style="endArrow=block;html=1;strokeColor=#FF8C00;strokeWidth=2;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1300" y="185" as="sourcePoint" />
+            <mxPoint x="1370" y="185" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-orange-text" value="Low-risk (auto)" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#FF8C00;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="175" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-red" value="" style="endArrow=block;html=1;strokeColor=#FF0000;strokeWidth=2;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1300" y="215" as="sourcePoint" />
+            <mxPoint x="1370" y="215" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-red-text" value="High/Critical (approval)" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#FF0000;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="205" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-dashed" value="" style="endArrow=block;html=1;strokeColor=#808080;strokeWidth=1;dashed=1;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1300" y="245" as="sourcePoint" />
+            <mxPoint x="1370" y="245" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-dashed-text" value="Metrics / monitoring" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#808080;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="235" width="120" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

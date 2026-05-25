@@ -1,0 +1,20 @@
+# =============================================================================
+# Example variable values — copy to terraform.tfvars and update
+# =============================================================================
+
+project_name            = "terraform-drift-detect"
+aws_region              = "us-east-1"
+notification_email      = "your-email@example.com"
+terraform_source_bucket = "your-source-bucket-name"
+terraform_source_key    = "source/target-infra.zip"
+terraform_state_bucket  = "your-state-bucket-name"
+terraform_lock_table    = "terraform-drift-detect-locks"
+vpc_id                  = "vpc-xxxxxxxxxxxxxxxxx"
+schedule_expression     = "rate(6 hours)"
+terraform_version       = "1.9.8"
+
+tags = {
+  ManagedBy   = "terraform"
+  Pattern     = "drift-detection"
+  Environment = "production"
+}

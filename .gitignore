@@ -1,0 +1,52 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Lambda packages (auto-generated)
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated diagrams
+*.vsdx
+
+# Internal documents
+*.pdf
+ARTICLE.md
+
+# Test artifacts
+drift_result.json
+build_output.json
+terraform/terraform.tfvars
+
+# Scanner output (never commit — contains absolute paths and builder aliases)
+.ash/ash_output/
+.holmes/
+
+# Terraform tfvars (account-specific)
+terraform/terraform.tfvars

@@ -1,0 +1,78 @@
+{
+  "Comment": "Terraform Drift Detection and Remediation Orchestrator",
+  "StartAt": "RunTerraformPlan",
+  "States": {
+    "RunTerraformPlan": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::codebuild:startBuild.sync",
+      "Parameters": {
+        "ProjectName": "${codebuild_plan_project}"
+      },
+      "ResultPath": "$.buildResult",
+      "Next": "ClassifyDrift"
+    },
+    "ClassifyDrift": {
+      "Type": "Task",
+      "Resource": "${classifier_lambda_arn}",
+      "Parameters": {
+        "reports_bucket": "${reports_bucket}",
+        "buildResult.$": "$.buildResult"
+      },
+      "ResultPath": "$.classification",
+      "Next": "EvaluateSeverity"
+    },
+    "EvaluateSeverity": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.classification.action",
+          "StringEquals": "none",
+          "Next": "NoDrift"
+        },
+        {
+          "Variable": "$.classification.action",
+          "StringEquals": "auto_remediate",
+          "Next": "AutoRemediate"
+        },
+        {
+          "Variable": "$.classification.action",
+          "StringEquals": "notify_and_approve",
+          "Next": "NotifyHighRisk"
+        }
+      ],
+      "Default": "NoDrift"
+    },
+    "NoDrift": {
+      "Type": "Succeed",
+      "Comment": "No drift detected — pipeline exits cleanly"
+    },
+    "AutoRemediate": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::codebuild:startBuild.sync",
+      "Parameters": {
+        "ProjectName": "${codebuild_apply_project}"
+      },
+      "ResultPath": "$.applyResult",
+      "Next": "RemediationComplete"
+    },
+    "NotifyHighRisk": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "${sns_topic_arn}",
+        "Subject": "Terraform Drift Detected - Approval Required",
+        "Message.$": "States.Format('Drift detected. Severity: {}. Details: {}. To remediate, run: aws codebuild start-build --project-name ${codebuild_apply_project}', $.classification.severity, $.classification.message)"
+      },
+      "ResultPath": "$.notifyResult",
+      "Next": "WaitingForApproval"
+    },
+    "WaitingForApproval": {
+      "Type": "Succeed",
+      "Comment": "Notification sent — manual remediation required for high/critical drift"
+    },
+    "RemediationComplete": {
+      "Type": "Succeed",
+      "Comment": "Low-risk drift auto-remediated successfully"
+    }
+  }
+}

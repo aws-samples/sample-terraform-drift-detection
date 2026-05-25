@@ -1,0 +1,74 @@
+# ASH Configuration for Terraform Drift Detection Pattern
+# See: https://github.com/awslabs/automated-security-helper
+
+global_settings:
+  threshold: MEDIUM
+  fail_on_findings: true
+
+scan_settings:
+  exclude_paths:
+    - ".terraform"
+    - ".ash"
+    - ".git"
+    - "drift_result.json"
+    - "target-infra.zip"
+    - "*.tfplan"
+    - "lambda/classifier.zip"
+
+# Suppressions for accepted security debt (documented in SECURITY.md)
+suppressions:
+  # D1: Resource = "*" on Describe/Get/List — APIs don't support resource-level perms
+  - rule_id: CKV_AWS_356
+    reason: "Accepted: Terraform plan read actions do not support resource-level permissions"
+
+  # D5: Lambda not in VPC — stateless, AWS-internal traffic only
+  - rule_id: CKV_AWS_117
+    reason: "Accepted: Lambda is stateless with AWS-internal API traffic only (documented in SECURITY.md D5)"
+
+  # D4: Lambda env vars not KMS encrypted — only non-sensitive bucket name
+  - rule_id: CKV_AWS_173
+    reason: "Accepted: Only env var is non-sensitive reports bucket name (documented in SECURITY.md D4)"
+
+  # Optional: Lambda reserved concurrency
+  - rule_id: CKV_AWS_115
+    reason: "Optional improvement: documented in SECURITY.md Production Hardening"
+
+  # Optional: Lambda code signing
+  - rule_id: CKV_AWS_272
+    reason: "Optional improvement: documented in SECURITY.md Production Hardening"
+
+  # Optional: Step Functions X-Ray tracing
+  - rule_id: CKV_AWS_284
+    reason: "Optional improvement: documented in SECURITY.md Production Hardening"
+
+  # D7: Security group 0.0.0.0/0 egress — test resource, intentional drift target
+  - rule_id: CKV_AWS_382
+    reason: "Accepted: Test security group is intentional drift target (documented in SECURITY.md D7)"
+
+  # Security group not attached — test resource for drift demo
+  - rule_id: CKV2_AWS_5
+    reason: "Accepted: Test security group is intentional drift target, not attached by design"
+
+  # S3 cross-region replication — not required for sample pattern
+  - rule_id: CKV_AWS_144
+    reason: "Accepted: Cross-region replication not required for sample drift detection pattern"
+
+  # S3 bucket SSE with default key on target-infra — test resource (SECURITY.md D6)
+  - rule_id: CKV_AWS_145
+    reason: "Accepted: Test bucket uses AES256 for simplicity (documented in SECURITY.md D6)"
+
+  # S3 event notifications — not required for this pattern
+  - rule_id: CKV2_AWS_62
+    reason: "Accepted: S3 event notifications not required for drift detection workflow"
+
+  # S3 lifecycle abort incomplete multipart upload — optional hardening
+  - rule_id: CKV_AWS_300
+    reason: "Optional improvement: documented in SECURITY.md Production Hardening"
+
+  # S3 bucket lifecycle — target-infra test bucket
+  - rule_id: CKV2_AWS_61
+    reason: "Accepted: Test bucket has no lifecycle requirement for sample pattern"
+
+  # Semgrep/Opengrep IAM findings — already scoped with comments
+  - rule_id: generic.secrets.security.detected-aws-account-id.detected-aws-account-id
+    reason: "False positive: Terraform interpolation, not hardcoded account ID"

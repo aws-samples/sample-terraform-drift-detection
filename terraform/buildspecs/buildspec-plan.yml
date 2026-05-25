@@ -1,0 +1,40 @@
+version: 0.2
+env:
+  variables:
+    TF_IN_AUTOMATION: "true"
+phases:
+  install:
+    commands:
+      - yum install -y unzip
+      - |
+        TF_URL="https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip"
+        curl -sL "$TF_URL" -o tf.zip
+      - unzip tf.zip -d /usr/local/bin/
+      - terraform --version
+  pre_build:
+    commands:
+      - terraform init -input=false
+  build:
+    commands:
+      - terraform plan -var "vpc_id=${VPC_ID}" -out=plan.tfplan -detailed-exitcode -input=false; export TF_EXIT=$?
+      - |
+        if [ "$TF_EXIT" = "1" ]; then
+          echo "ERROR: terraform plan failed"
+          exit 1
+        elif [ "$TF_EXIT" = "2" ]; then
+          echo "DRIFT_DETECTED=true"
+          terraform show -json plan.tfplan > drift_result.json
+        else
+          echo "DRIFT_DETECTED=false"
+          echo '{"drift_detected": false, "resource_changes": []}' > drift_result.json
+        fi
+  post_build:
+    commands:
+      - TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+      - aws s3 cp drift_result.json "s3://${REPORTS_BUCKET}/plans/${TIMESTAMP}/drift_result.json"
+      - echo "{\"timestamp\":\"${TIMESTAMP}\", \"s3_key\":\"plans/${TIMESTAMP}/drift_result.json\"}" > build_output.json
+artifacts:
+  files:
+    - drift_result.json
+    - build_output.json
+  discard-paths: yes
